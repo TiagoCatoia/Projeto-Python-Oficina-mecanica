@@ -56,7 +56,7 @@ def submenu_mecanicos():
             cadastrar_mecanicos(mecanicos)
 
         elif opcao == 2:
-            print("Alterarando ou Excluindo os dados de um mecânico...")
+            print("Alterarando/Excluindo os dados de um mecânico...")
             alterar_excluir_mecanicos(mecanicos)
 
         elif opcao == 3:
@@ -66,11 +66,12 @@ def submenu_mecanicos():
         elif opcao == 4:
             print("Imprimindo todos...")
             imprimir_mecanicos(mecanicos)
+        elif opcao == 0:
+            print("Voltando ao menu...")
         else:
             print("\nOpção inválida,tente novamente!")
     if opcao == 0:
         gravar_mecanico(arquivo_mecanicos,mecanicos)
-        print("Voltando ao menu...")
 
 def submenu_veiculos():
     arquivo_veiculos = "./dados_veiculos.txt"
@@ -79,7 +80,7 @@ def submenu_veiculos():
     while opcao != 0:
         print("Escolha uma opção ou 0 para voltar ao menu principal...")
         print("1. Cadastrar um novo veículo")
-        print("2. Alterar/Excluir um dado de um veículo")
+        print("2. Alterar/Excluir um dado de um mecânico")
         print("3. Imprimir o cadastro de um veículo")
         print("4. Imprimir todos os cadastros de veículos")
         print("0. Voltar ao menu principal")
@@ -99,6 +100,8 @@ def submenu_veiculos():
         elif opcao == 4:
             print("Imprimindo todos")
             imprimir_veiculos(veiculos)
+        elif opcao == 0:
+            print("Voltando ao menu...")
         else:
             print("\nOpção inválida,tente novamente!")
     if opcao == 0:
@@ -112,7 +115,7 @@ def submenu_consertos():
     while opcao != 0:
         print("Escolha uma opção ou 0 para voltar ao menu principal...")
         print("1. Cadastrar um novo conserto")
-        print("2. Alterar/Excluir um dado de um conserto")
+        print("2. Alterar/Excluir um dado de um mecânico")
         print("3. Imprimindo os dados de um cadastro de conserto")
         print("4. Imprimindo todos os cadastros de consertos")
         print("0. Voltar ao menu principal")
@@ -132,35 +135,37 @@ def submenu_consertos():
         elif opcao == 4:
             print("Imprimindo todos...")
             imprimir_consertos(consertos)
+        elif opcao == 0:
+            print("Voltando ao menu...")
         else:
             print("\nOpção inválida,tente novamente!")
     if opcao == 0:
         gravar_consertos(arquivo_consertos,consertos)
         print("Voltando ao menu...")
 
-def submenu_relatorios():              ## COLOCAR UMA DESCRIÇÂO DO RELATORIO NA ESCOLHA DA OPCAO
+def submenu_relatorios():
     opcao = 10
     while opcao != 0:
         print("Escolha uma opção ou 0 para voltar ao menu principal...")
-        print("1. Acessar o primeiro relatório")
-        print("2. Acessar o segundo relatório")
-        print("3. Acessar o terceiro relatório")
+        print("1. Mostrar os dados de todos os mecânicos que possuem mais do que determinada idade")
+        print("2. Mostrar os dados de todos os veículos de determinada marca")
+        print("3. Mostrar o CPF do mecânico, nome do mecânico, a placa completa, a marca, o modelo e o ano do veículo e os demais dados dos consertos com data de entrada entre um período determinado")
         print("0. Voltar ao menu principal")
         opcao = int(input("Digite sua opção: "))
         if opcao == 1:
             arquivo_mecanicos = "./dados_mecanicos.txt"
             mecanicos = carregar_arq_mecanico(arquivo_mecanicos)
-            print("Abrindo o primeiro relatório...")
+            print("Abrindo o relatório...")
             relatorio_1(mecanicos)
         
         elif opcao == 2:
             arquivo_veiculos = "./dados_veiculos.txt"
             veiculos = carregar_arq_veiculos(arquivo_veiculos)
-            print("Abrindo o segundo relatório...")
+            print("Abrindo o relatório...")
             relatorio_2(veiculos)
         
         elif opcao == 3:
-            print("Abrindo o terceiro relatório...")
+            print("Abrindo o relatório...")
             arquivo_mecanicos = "./dados_mecanicos.txt"
             arquivo_veiculos = "./dados_veiculos.txt"
             arquivo_consertos = "./dados_consertos.txt"
@@ -168,6 +173,8 @@ def submenu_relatorios():              ## COLOCAR UMA DESCRIÇÂO DO RELATORIO N
             veiculos = carregar_arq_veiculos(arquivo_veiculos)
             consertos = carregar_arq_consertos(arquivo_consertos)
             relatorio_3(mecanicos,veiculos,consertos)
+        elif opcao == 0:
+            print("Voltando ao menu...")
         else:
             print("\nOpção inválida,tente novamente!")
 
@@ -175,21 +182,24 @@ def submenu_relatorios():              ## COLOCAR UMA DESCRIÇÂO DO RELATORIO N
         print("Voltando ao menu...")
 
 #########################################################################
+
 def existe_arquivo(arquivo):
     import os
     if os.path.exists(arquivo):
         return True
     else:
         return False
+    
 #########################################################################
+
 def verificar_mecanico(lista_mecanicos, cpf):
     for i in range(len(lista_mecanicos)):
         if lista_mecanicos[i].cpf == cpf: 
             return i
     return -1
 
-def cadastrar_mecanicos(lista_mecanicos):                #CADASTRAR APENAS 1 email/telefone EXTRA OU MAIS VÁRIOS??? 
-    mecanico = Mecanico()                                #OUTRAS VERIFICACOES COMO O TAMANHO DO CPF/TELEFONE NECESSARIO???
+def cadastrar_mecanicos(lista_mecanicos):     
+    mecanico = Mecanico()
     mecanico.email = []
     mecanico.telefone = []
     mecanico.cpf = input('Digite o CPF: ')
@@ -203,16 +213,29 @@ def cadastrar_mecanicos(lista_mecanicos):                #CADASTRAR APENAS 1 ema
         mecanico.email.append(email)
         print("Deseja cadastrar mais um email?")
         opcao = int(input("Digite 1 para SIM ou 2 para NAO: "))
-        if opcao == 1:
-            email = input("Digite o email: ")
-            mecanico.email.append(email)
+        while opcao != 2:
+            if opcao == 1:
+                email = input("Digite o email: ")
+                mecanico.email.append(email)
+                print("Deseja cadastrar mais um email?")
+                opcao = int(input("Digite 1 para SIM ou 2 para NAO: "))
+            else:
+                print("Opção inválida!")
+                print("Deseja cadastrar mais um email?")
+                opcao = int(input("Digite 1 para SIM ou 2 para NAO: "))
         telefone = input("Digite o telefone com DDD: ")
         mecanico.telefone.append(telefone)
         print("Deseja cadastrar mais um telefone?")
         opcao = int(input("Digite 1 para SIM ou 2 para NAO: "))
-        if opcao == 1:
-            telefone = input("Digite o telefone com DDD: ")
-            mecanico.telefone.append(telefone)
+        while opcao != 2:
+            if opcao == 1:
+                telefone = input("Digite o telefone com DDD: ")
+                mecanico.telefone.append(telefone)
+                print("Deseja cadastrar mais um telefone?")
+                opcao = int(input("Digite 1 para SIM ou 2 para NAO: "))
+            else:
+                print("Opção inválida!")
+                opcao = int(input("Digite 1 para SIM ou 2 para NAO: "))
         lista_mecanicos.append(mecanico)
     else:
         print("Este CPF já está cadastrado...")
@@ -221,9 +244,10 @@ def alterar_excluir_mecanicos(lista_mecanicos):
     cpf = input("Informe o CPF do mecânico: ")
     posicao = verificar_mecanico(lista_mecanicos, cpf)
     if posicao != -1:
-        print("Se deseja alterar um dado digite 1")
-        print("Se deseja excluir um dado ou um cadastro completo digite 2")
-        print("Se deseja voltar ao menu principal digite 0")
+        print("Digite a opção desejada:")
+        print("1 - Se deseja alterar um dado")
+        print("2 - Se deseja excluir o cadastro completo")
+        print("0 - Se deseja voltar ao menu")
         opcao = int(input("Digite sua escolha: "))
         if opcao == 1:
             print("Digite o dado que deseja alterar...")
@@ -231,51 +255,70 @@ def alterar_excluir_mecanicos(lista_mecanicos):
             print("1 - Salário")
             print("2 - E-mail")
             print("3 - Telefone")
+            print("4 - Nome")
+            print("5 - Data de nascimento")
+            print("6 - Sexo")
             escolha = int(input("Digite a opção que deseja alterar: "))
             if escolha == 1:
                 lista_mecanicos[posicao].salario = input("Digite o novo salário: ")
-            elif escolha == 3:
-                lista_mecanicos[posicao].email = input("Digite o novo e-mail: ")
+            elif escolha == 2:
+                print(lista_mecanicos[posicao].email)
+                alterar_email = input("Digite o e-mail antigo que deseja alterar:")
+                novo_email = input("Digite o novo e-mail: ")
+                for i in range(len(lista_mecanicos[posicao.email])):
+                    if lista_mecanicos[posicao].email[i] == alterar_email:
+                        lista_mecanicos[posicao].email[i] = novo_email
                 print("Deseja cadastrar mais um email?")
-                opcao = int(input("Digite 1 para SIM ou 2 para NAO: "))
-                if opcao == 1:
-                    lista_mecanicos[posicao].email = input("Digite mais um e-mail: ")
+                op = int(input("Digite 1 para SIM ou 2 para NAO: "))
+                while op != 2:
+                    if op == 1:
+                        email = input("Digite o email: ")
+                        lista_mecanicos[posicao].email.append(email)
+                        print("Deseja cadastrar mais um email?")
+                        op = int(input("Digite 1 para SIM ou 2 para NAO: "))
+                    else:
+                        print("Opção inválida!")
+                        print("Deseja cadastrar mais um email?")
+                        op = int(input("Digite 1 para SIM ou 2 para NAO: "))
             elif escolha == 3:
-                lista_mecanicos[posicao].telefone = input("Digite o novo telefone com DDD: ")
+                print(lista_mecanicos[posicao].telefone)
+                alterar_telefone = input("Digite o telefone antigo que deseja alterar:")
+                novo_telefone = input("Digite o novo telefone com DDD: ")
+                for i in range(len(lista_mecanicos[posicao].telefone)):
+                    if lista_mecanicos[posicao].telefone[i] == alterar_telefone:
+                        lista_mecanicos[posicao].telefone[i] = novo_telefone
                 print("Deseja cadastrar mais um telefone?")
-                opcao = int(input("Digite 1 para SIM ou 2 para NAO: "))
-                if opcao == 1:
-                    lista_mecanicos[posicao].telefone = input("Digite mais um telefone com DDD: ")
-        elif opcao == 2:
-            print("Se deseja excluir um dado digite 1")
-            print("Se deseja excluir um cadastro por completo digite 2")
-            opcao = int(input('Digite sua opção: '))
-            if opcao == 1:
-                print("Digite o dado que deseja excluir...")
-                print("Opções:")
-                print("1 - Salário")
-                print("2 - E-mail")
-                print("3 - Telefone")
-                escolha = int(input("Digite a opção que deseja excluir: "))
-                if escolha == 1:
-                    del lista_mecanicos[posicao].salario
-                    print("Salário excluído com sucesso")
-                elif escolha == 2:
-                    del lista_mecanicos[posicao].email
-                    print("E-mail(s) excluído(s) com sucesso")
-                elif escolha == 3:
-                    del lista_mecanicos[posicao].telefone
-                    print("Telefone(s) excluído(s) com sucesso")
-            elif opcao == 2:
-                del lista_mecanicos[posicao]
-                print("Este mecânico foi removido do cadastro")
+                op = int(input("Digite 1 para SIM ou 2 para NAO: "))
+                while op != 2:
+                    if op == 1:
+                        telefone = input("Digite o telefone: ")
+                        lista_mecanicos[posicao].telefone.append(telefone)
+                        print("Deseja cadastrar mais um telefone?")
+                        op = int(input("Digite 1 para SIM ou 2 para NAO: "))
+                    else:
+                        print("Opção inválida!")
+                        print("Deseja cadastrar mais um telefone?")
+                        op = int(input("Digite 1 para SIM ou 2 para NAO: "))
+            elif escolha == 4:
+                lista_mecanicos[posicao].nome = input("Digite o novo nome: ")
+            elif escolha == 5:
+                lista_mecanicos[posicao].data_nascimento = input("Digite a nova data de nascimento no formato (dd/mm/aaaa): ")
+            elif escolha == 6:
+                lista_mecanicos[posicao].sexo = input("Digite o novo sexo: ")
             else:
-                print("Esta opção não existe...")
+                print("Opção inválida")
+
+        elif opcao == 2:
+            del lista_mecanicos[posicao]
+            print("Este mecânico foi removido do cadastro")
+            print("Voltando ao menu...\n")
+        elif opcao == 0:
+            print("Voltando ao menu...\n")
         else:
-            print("Voltando ao menu principal...")
-            menu_de_submenus()
+            print("Opção inválida\n")
     else:
         print("Este CPF não está cadastrado")
+        print("Voltando ao menu...\n")
 
 def imprimir_mecanicos(lista_mecanicos):
     if len(lista_mecanicos) == 0:
@@ -314,7 +357,7 @@ def carregar_arq_mecanico(arquivo_mecanicos):
 
     if existe_arquivo(arquivo_mecanicos):
         arq = open(arquivo_mecanicos,'r')
-        for linha in arq:
+        for linha in arq:  # evita que o \n extra, também pode-se usar o replace
             if linha[-1] == "\n":
                 linha = linha[:-1]
             lista_email = []
@@ -365,43 +408,49 @@ def alterar_excluir_veiculos(lista_veiculos):
     placa = input("Informe a Placa do veículo: ")
     posicao = verificar_veiculo(lista_veiculos, placa)
     if posicao != -1:
-        print("Se deseja alterar um dado digite 1")
-        print("Se deseja excluir um cadastro completo digite 2")
-        print("Se deseja voltar ao menu principal digite 0")
+        print("Digite a opção desejada:")
+        print("1 - Se deseja alterar um dado")
+        print("2 - Se deseja excluir o cadastro completo")
+        print("0 - Se deseja voltar ao menu")
         opcao = int(input("Digite sua escolha: "))
         if opcao == 1:
             print("Digite o dado que deseja alterar...")
             print("Opções:")
             print("1 - Combustível")
             print("2 - Cor")
+            print("3 - Tipo")
+            print("4 - Marca")
+            print("5 - Modelo")
+            print("6 - Ano")
+            print("7 - Portas")
             escolha = int(input("Digite a opção que deseja alterar: "))
             if escolha == 1:
                 lista_veiculos[posicao].combustivel = input("Digite o novo combustível: ")
-                print("Combustível alterado")
-                print("Voltando ao menu")
-                menu_de_submenus()
             elif escolha == 2:
                 lista_veiculos[posicao].cor = input("Digite a nova cor: ")
-                print("Cor alterada")
-                print("Voltando ao menu")
-                menu_de_submenus()
+            elif escolha == 3:
+                lista_veiculos[posicao].tipo = input("Digite o novo tipo: ")
+            elif escolha == 4:
+                lista_veiculos[posicao].marca = input("Digite a nova marca: ")
+            elif escolha == 5:
+                lista_veiculos[posicao].modelo = input("Digite o novo modelo: ")
+            elif escolha == 6:
+                lista_veiculos[posicao].ano = input("Digite o novo ano: ")
+            elif escolha == 7:
+                lista_veiculos[posicao].portas = input("Digite a nova quantia de portas: ")
+            else:
+                print("Opção inválida")
         elif opcao == 2:
-            print(f"Tem certeza que deseja excluir o cadastro completo do veículo de placa {placa}")
-            print("SIM - Digite 1")
-            print("NÂO - Digite 2")
-            opcao = int(input("Digite sua opção: "))
-            if opcao == 1:
                 del lista_veiculos[posicao]
                 print("Este veículo foi excluído do cadastro")
-                print("Voltando ao menu")
-                menu_de_submenus()
-            elif opcao == 2:
-                print('Voltando ao menu')
-                menu_de_submenus()
+                print("Voltando ao menu...\n")
+        elif opcao == 0:
+            print("Voltando ao menu...\n")
+        else:
+            print("Opção inválida\n")
     else:
-        print(f"Essa Placa: {placa} não está cadastrada")
-        print("Voltando ao menu")
-        menu_de_submenus()
+        print(f"Essa placa não está cadastrada")
+        print("Voltando ao menu...\n")
 
 def imprimir_veiculos(lista_veiculos):
     if len(lista_veiculos) == 0:
@@ -465,11 +514,9 @@ def cadastrar_consertos(lista_consertos):
         conserto.data_saida = input("Digite a data de saída no formato (dd/mm/aaaa): ")
         conserto.descricao_problemas = input("Descreva os problemas que levaram ao conserto: ")
         conserto.valor_conserto = input("Digite o valor do conserto: ")
+        lista_consertos.append(conserto)
     elif achou != -1:
-        print("Está Placa já esta cadastrada nos consertos")
-
-    lista_consertos.append(conserto)
-
+        print("Este concerto já está cadastrado")
 
 def alterar_excluir_consertos(lista_consertos):
     placa_conserto = input("Informe a placa do conserto: ")
@@ -477,9 +524,10 @@ def alterar_excluir_consertos(lista_consertos):
     data_entrada = input("Digite a data de entrada no formato (dd/mm/aaaa): ")
     posicao = verificar_conserto(lista_consertos, cpf_conserto, placa_conserto, data_entrada )
     if posicao != -1:
-        print("Se deseja alterar um dado digite 1")
-        print("Se deseja excluir um cadastro completo digite 2")
-        print("Se deseja voltar ao menu principal digite 0")
+        print("Digite a opção desejada:")
+        print("1 - Se deseja alterar um dado")
+        print("2 - Se deseja excluir o cadastro completo")
+        print("0 - Se deseja voltar ao menu")
         opcao = int(input("Digite sua escolha: "))
         if opcao == 1:
             print("Digite o dado que deseja alterar...")
@@ -492,31 +540,21 @@ def alterar_excluir_consertos(lista_consertos):
                 lista_consertos[posicao].data_saida = input("Digite a data de saída no formato (dd/mm/aaaa): ")
             elif escolha == 2:
                 lista_consertos[posicao].descricao_problemas = input("Digite a nova descrição dos problemas: ")
-                print("Descrição alterada")
-                print("Voltando ao menu")
-                menu_de_submenus()
             elif escolha == 3:
                 lista_consertos[posicao].valor_conserto = input("Digite o novo valor do conserto: ")
-                print("Valor alterado")
-                print("Voltando ao menu")
-                menu_de_submenus()
+            else:
+                print("Opção inválida")
         elif opcao == 2:
-            print(f"Tem certeza que deseja excluir o cadastro completo do veículo do conserto de placa {placa_conserto}")
-            print("SIM - Digite 1")
-            print("NÂO - Digite 2")
-            opcao = int(input("Digite sua opção: "))
-            if opcao == 1:
-                del lista_consertos[posicao]
-                print("Este veículo foi excluído do cadastro dos consertos")
-                print("Voltando ao menu")
-                menu_de_submenus()
-            elif opcao == 2:
-                print('Voltando ao menu')
-                menu_de_submenus()
+            del lista_consertos[posicao]
+            print("Este veículo foi excluído do cadastro dos consertos")
+            print("Voltando ao menu...\n")
+        elif opcao == 0:
+            print("Voltando ao menu...\n")
+        else:
+            print("Opção inválida\n")
     else:
-        print(f"Essa Placa: {placa_conserto} não está cadastrada nos consertos")
-        print("Voltando ao menu")
-        menu_de_submenus()
+        print(f"Este conserto não está cadastrado")
+        print("Voltando ao menu...\n")
 
 def imprimir_consertos(lista_consertos):
     if len(lista_consertos) == 0:
@@ -561,6 +599,7 @@ def carregar_arq_consertos(arquivo_consertos):
             dados_consertos.append(cons)
         arq.close()
     return dados_consertos
+
 ##########################################################################
 
 def relatorio_1(lista_mecanicos):
@@ -618,10 +657,10 @@ def relatorio_3(lista_mecanicos,lista_veiculos,lista_consertos):
             for t in range(len(lista_veiculos)):
                 if lista_veiculos[t].placa == lista_consertos[i].placa_conserto:
                     print(f" | Placa: {lista_veiculos[t].placa} | Marca: {lista_veiculos[t].marca} | Modelo: {lista_veiculos[t].modelo} | Ano: {lista_veiculos[t].ano}",end=" ")
-            print(f" | Data de entrada para conserto: {lista_consertos[i].data_entrada} e Data de saída: {lista_consertos[i].data_saida} | Descrição do problema: {lista_consertos[i].descricao_problemas} | Valor do conserto: {lista_consertos[i].valor_conserto}")
+            print(f" | Data de entrada para conserto: {lista_consertos[i].data_entrada} e Data de saída: {lista_consertos[i].data_saida} | Descrição do problema: {lista_consertos[i].descricao_problemas} | Valor do conserto: {lista_consertos[i].valor_conserto}\n")
 
     if achou == False:
-        print("Não existem consertos cadastrados entre essas datas!")
+        print("Não existem consertos cadastrados entre essas datas!\n")
 
 ##########################################################################
 
@@ -643,7 +682,9 @@ def main():
         else:
             print("Opção inválida!")
             print("Digite novamente...")
+
         opcao = menu_de_submenus()
     print("Encerrando o programa...")
+
 ##########################################################################
 main()
