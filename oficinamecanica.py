@@ -80,7 +80,7 @@ def submenu_veiculos():
     while opcao != 0:
         print("Escolha uma opção ou 0 para voltar ao menu principal...")
         print("1. Cadastrar um novo veículo")
-        print("2. Alterar/Excluir um dado de um mecânico")
+        print("2. Alterar/Excluir um dado de um veículo")
         print("3. Imprimir o cadastro de um veículo")
         print("4. Imprimir todos os cadastros de veículos")
         print("0. Voltar ao menu principal")
@@ -115,7 +115,7 @@ def submenu_consertos():
     while opcao != 0:
         print("Escolha uma opção ou 0 para voltar ao menu principal...")
         print("1. Cadastrar um novo conserto")
-        print("2. Alterar/Excluir um dado de um mecânico")
+        print("2. Alterar/Excluir um dado de um conserto")
         print("3. Imprimindo os dados de um cadastro de conserto")
         print("4. Imprimindo todos os cadastros de consertos")
         print("0. Voltar ao menu principal")
